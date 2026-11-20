@@ -1,3 +1,4 @@
+import { Link } from "react-router";
 import { motion } from "framer-motion";
 import {
   ArrowRight,
@@ -12,6 +13,9 @@ import {
  * Hero Banner Section for Voltix.
  * Highlights high-performance electronics with dark mode aesthetics,
  * glassmorphism surfaces, animated headlines, CTAs, and a flagship visual card.
+ *
+ * Primary CTA ("Explore Products") navigates to the dedicated /products page.
+ * Secondary CTA ("View Featured Drops") scrolls to the Home Page featured 3-card showcase.
  */
 const Hero = () => {
   return (
@@ -55,19 +59,21 @@ const Hero = () => {
 
             {/* CTA Buttons */}
             <div className="flex flex-wrap items-center gap-4 pt-2">
-              <a
-                href="#products"
+              {/* Primary CTA navigating to /products */}
+              <Link
+                to="/products"
                 className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-cyan-400 to-blue-500 px-7 py-3.5 text-sm font-bold text-slate-950 shadow-[0_0_24px_rgba(6,182,212,0.4)] transition-all duration-300 hover:shadow-[0_0_32px_rgba(6,182,212,0.6)] hover:scale-105 active:scale-95"
               >
                 <span>Explore Products</span>
                 <ArrowRight className="h-4 w-4" />
-              </a>
+              </Link>
 
+              {/* Secondary CTA scrolling to the 3-card featured section */}
               <a
-                href="#categories"
+                href="#products"
                 className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-slate-900/40 px-6 py-3.5 text-sm font-semibold text-white backdrop-blur-xl transition hover:border-cyan-400/40 hover:bg-slate-800/60"
               >
-                <span>Browse Categories</span>
+                <span>View Featured Drops</span>
               </a>
             </div>
 

@@ -1,31 +1,41 @@
 import { useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router";
 import { motion, AnimatePresence } from "framer-motion";
 import { Zap, Search, Menu, X } from "lucide-react";
 
 /**
  * Navigation Bar Component.
  * Features:
- * - Brand logo & name ("Voltix")
- * - Clean anchor navigation links with smooth scrolling (Home, Products, Categories, Contact)
- * - Live search input that immediately filters products by name or category
+ * - Brand logo & name ("Voltix") linking to Home (/)
+ * - React Router navigation: "Products" links to /products; "Home" links to /
+ * - "Categories" links to /products#categories (where full filter buttons reside)
+ * - "Contact" links to #contact / /#contact
+ * - Live search input that syncs across routes; pressing Enter on Home navigates to /products
  * - Responsive mobile drawer menu
  */
 const Navbar = ({ searchQuery = "", setSearchQuery = () => {} }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const isHomePage = location.pathname === "/";
+  const isProductsPage = location.pathname === "/products";
 
-  const navLinks = [
-    { label: "Home", href: "#home" },
-    { label: "Products", href: "#products" },
-    { label: "Categories", href: "#categories" },
-    { label: "Contact", href: "#contact" },
-  ];
+  const handleAnchorClick = (e, targetHash) => {
+    if (isHomePage) {
+      e.preventDefault();
+      setMobileMenuOpen(false);
+      const element = document.querySelector(targetHash);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
+    } else {
+      setMobileMenuOpen(false);
+    }
+  };
 
-  const handleLinkClick = (e, href) => {
-    e.preventDefault();
-    setMobileMenuOpen(false);
-    const target = document.querySelector(href);
-    if (target) {
-      target.scrollIntoView({ behavior: "smooth" });
+  const handleSearchKeyDown = (e) => {
+    if (e.key === "Enter" && !isProductsPage) {
+      navigate("/products");
     }
   };
 
@@ -33,9 +43,14 @@ const Navbar = ({ searchQuery = "", setSearchQuery = () => {} }) => {
     <header className="sticky top-0 z-50 border-b border-white/10 bg-slate-950/80 backdrop-blur-xl transition-all">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3.5 sm:px-6 lg:px-8">
         {/* Brand Logo & Name */}
-        <a
-          href="#home"
-          onClick={(e) => handleLinkClick(e, "#home")}
+        <Link
+          to="/"
+          onClick={(e) => {
+            if (isHomePage) {
+              e.preventDefault();
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }
+          }}
           className="group flex shrink-0 items-center gap-2.5 text-xl font-bold tracking-tight text-white"
         >
           <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-500/20 to-blue-500/20 text-cyan-400 ring-1 ring-cyan-400/40 shadow-[0_0_15px_rgba(6,182,212,0.25)] transition-transform group-hover:scale-105">
@@ -44,20 +59,60 @@ const Navbar = ({ searchQuery = "", setSearchQuery = () => {} }) => {
           <span className="text-xl font-extrabold tracking-tight">
             Volt<span className="text-cyan-400">ix</span>
           </span>
-        </a>
+        </Link>
 
         {/* Desktop Navigation Links */}
         <nav className="hidden md:flex items-center gap-8">
-          {navLinks.map((link) => (
+          <Link
+            to="/"
+            onClick={(e) => {
+              if (isHomePage) {
+                e.preventDefault();
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }
+            }}
+            className={`text-sm font-medium transition-colors duration-200 ${
+              isHomePage ? "text-cyan-400 font-semibold" : "text-slate-300 hover:text-cyan-400"
+            }`}
+          >
+            Home
+          </Link>
+
+          {/* Products Link - Dedicated Route */}
+          <Link
+            to="/products"
+            className={`text-sm font-medium transition-colors duration-200 ${
+              isProductsPage ? "text-cyan-400 font-semibold" : "text-slate-300 hover:text-cyan-400"
+            }`}
+          >
+            Products
+          </Link>
+
+          {/* Categories Link - Links to full filter bar on /products#categories */}
+          <Link
+            to="/products#categories"
+            className="text-sm font-medium text-slate-300 transition-colors duration-200 hover:text-cyan-400"
+          >
+            Categories
+          </Link>
+
+          {/* Contact Anchor Link */}
+          {isHomePage ? (
             <a
-              key={link.label}
-              href={link.href}
-              onClick={(e) => handleLinkClick(e, link.href)}
+              href="#contact"
+              onClick={(e) => handleAnchorClick(e, "#contact")}
               className="text-sm font-medium text-slate-300 transition-colors duration-200 hover:text-cyan-400"
             >
-              {link.label}
+              Contact
             </a>
-          ))}
+          ) : (
+            <Link
+              to="/#contact"
+              className="text-sm font-medium text-slate-300 transition-colors duration-200 hover:text-cyan-400"
+            >
+              Contact
+            </Link>
+          )}
         </nav>
 
         {/* Right Section: Live Search & Mobile Toggle */}
@@ -69,6 +124,7 @@ const Navbar = ({ searchQuery = "", setSearchQuery = () => {} }) => {
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={handleSearchKeyDown}
               placeholder="Search gadgets..."
               aria-label="Search electronics products or categories"
               className="w-full rounded-full border border-white/10 bg-white/5 py-2 pl-9 pr-8 text-xs sm:text-sm text-white placeholder-slate-400 outline-none transition-all duration-200 focus:border-cyan-400 focus:bg-slate-900 focus:ring-1 focus:ring-cyan-400/40"
@@ -108,16 +164,51 @@ const Navbar = ({ searchQuery = "", setSearchQuery = () => {} }) => {
             className="overflow-hidden border-t border-white/10 bg-slate-950/95 backdrop-blur-2xl md:hidden"
           >
             <div className="flex flex-col space-y-1 px-4 py-4">
-              {navLinks.map((link) => (
+              <Link
+                to="/"
+                onClick={() => setMobileMenuOpen(false)}
+                className={`rounded-lg px-3 py-2 text-sm font-medium transition hover:bg-white/5 hover:text-cyan-400 ${
+                  isHomePage ? "text-cyan-400 font-semibold bg-white/5" : "text-slate-300"
+                }`}
+              >
+                Home
+              </Link>
+
+              <Link
+                to="/products"
+                onClick={() => setMobileMenuOpen(false)}
+                className={`rounded-lg px-3 py-2 text-sm font-medium transition hover:bg-white/5 hover:text-cyan-400 ${
+                  isProductsPage ? "text-cyan-400 font-semibold bg-white/5" : "text-slate-300"
+                }`}
+              >
+                Products
+              </Link>
+
+              <Link
+                to="/products#categories"
+                onClick={() => setMobileMenuOpen(false)}
+                className="rounded-lg px-3 py-2 text-sm font-medium text-slate-300 transition hover:bg-white/5 hover:text-cyan-400"
+              >
+                Categories
+              </Link>
+
+              {isHomePage ? (
                 <a
-                  key={link.label}
-                  href={link.href}
-                  onClick={(e) => handleLinkClick(e, link.href)}
+                  href="#contact"
+                  onClick={(e) => handleAnchorClick(e, "#contact")}
                   className="rounded-lg px-3 py-2 text-sm font-medium text-slate-300 transition hover:bg-white/5 hover:text-cyan-400"
                 >
-                  {link.label}
+                  Contact
                 </a>
-              ))}
+              ) : (
+                <Link
+                  to="/#contact"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="rounded-lg px-3 py-2 text-sm font-medium text-slate-300 transition hover:bg-white/5 hover:text-cyan-400"
+                >
+                  Contact
+                </Link>
+              )}
             </div>
           </motion.div>
         )}

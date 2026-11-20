@@ -1,8 +1,8 @@
-# Voltix — Next-Gen Electronics Store (Retail Home Page)
+# Voltix — Next-Gen Electronics Store (Retail Home & Products Catalog)
 
-A modern, high-performance, single-page retail frontend for **Voltix**, an electronics store specializing in studio audio, smart wearables, mechanical gaming peripherals, and precision desktop accessories.
+A modern, high-performance retail frontend for **Voltix**, an electronics store specializing in studio audio, smart wearables, mechanical gaming peripherals, and precision desktop accessories.
 
-Designed strictly for a focused UI/UX evaluation featuring dark mode glassmorphism surfaces, vivid cyan/blue neon accents, smooth scrolling navigation, fluid Framer Motion animations, and a real-time dual-filtering engine.
+Designed with dark mode glassmorphism surfaces, vivid cyan/blue neon accents, smooth scrolling navigation, fluid Framer Motion animations, a real-time dual-filtering engine, and a dedicated `/products` catalog route powered by React Router.
 
 ---
 
@@ -15,29 +15,30 @@ Designed strictly for a focused UI/UX evaluation featuring dark mode glassmorphi
 
 ## ✨ Key Features & UI/UX Highlights
 
-1. **Focused Single-Page Architecture:**
-   - Dedicated retail home page with zero unnecessary multi-page routing clutter, authentication gates, or backend overhead.
-   - Smooth anchor navigation linking the Navbar, Hero CTAs, Category Filter, and Footer sections.
+1. **Clean Route Architecture (React Router):**
+   - **`/` (Home Page):** Showcases the brand Hero with flagship gear, curated category filters, and featured product grid.
+   - **`/products` (Dedicated Products Page):** Complete hardware catalog with a prominent header, in-page search input, category filter pills, real-time result metrics, and responsive product grid.
+   - **`RootLayout` & `ScrollToTop`:** Provides persistent navigation and footer, automatically scrolling to the top upon route changes.
 
 2. **Dark Mode & Glassmorphism Design:**
    - Deep slate canvas (`#030712`) enriched with ambient radial cyan/indigo gradients.
    - Frosted glass cards and navigation panels with backdrop blur (`backdrop-blur-xl`), crisp semi-transparent borders (`border-white/10`), and neon glowing accents.
 
 3. **Sticky Navbar with Live Dual-Attribute Search:**
-   - Brand logo with glowing icon badge.
-   - Anchor links (`Home`, `Products`, `Categories`, `Contact`) that smoothly scroll to sections.
+   - Brand logo with glowing icon badge linking to `/`.
+   - Router navigation linking `Products` to `/products`, `Home` to `/`, and smooth anchor scrolling for `Categories` (`#categories`) and `Contact` (`#contact`).
    - Responsive mobile drawer menu with smooth open/close transitions.
    - Real-time search bar filtering the catalog simultaneously by **Product Name** and **Category**, with quick-clear support.
 
 4. **Hero Banner Section:**
-   - Bold headline, curated subtext, and primary CTA button ("Explore Products") with smooth scrolling.
-   - Secondary info button ("Browse Categories") and trust metrics (Ultra-Low Latency, Curated Hardware, Premium Support).
+   - Bold headline, curated subtext, and primary CTA button ("Explore Products") linking to `/products`.
+   - Secondary info button ("Browse Categories") scrolling smoothly to `#categories`, and trust metrics (Ultra-Low Latency, Curated Hardware, Premium Support).
    - Glassmorphic flagship visual card highlighting featured studio gear with tech specifications.
 
 5. **Interactive Category Filter Bar:**
    - Filter pills for `All`, `Audio`, `Wearables`, `Gaming`, and `Accessories`.
    - Distinct Lucide icons per category and glowing active indicators.
-   - Real-time catalog metrics counter ("Showing X of Y items") and quick filter reset button.
+   - Real-time catalog metrics counter ("Showing X of 16 items") and quick filter reset button.
 
 6. **Product Grid (16 Curated Products):**
    - High-resolution, reliable Unsplash product images across all 4 categories.
@@ -59,6 +60,7 @@ Designed strictly for a focused UI/UX evaluation featuring dark mode glassmorphi
 ## 🛠️ Tech Stack
 
 - **Framework:** [React 19](https://react.dev/)
+- **Routing:** [React Router](https://reactrouter.com/) (v7/v8)
 - **Build Tool:** [Vite 8](https://vitejs.dev/)
 - **Styling:** [Tailwind CSS v4](https://tailwindcss.com/) with `@tailwindcss/vite`
 - **Animations:** [Framer Motion](https://www.framer.com/motion/)
@@ -82,14 +84,21 @@ voltix-store-client/
 │   │   ├── CategoryFilter.jsx    # Category filter pills & item counter
 │   │   ├── ProductCard.jsx       # Card displaying Image, Name, Price, Category
 │   │   ├── ProductGrid.jsx       # Responsive grid & empty state handler
+│   │   ├── ScrollToTop.jsx       # Automatic route & hash scroll restoration
 │   │   └── Footer.jsx            # Multi-column footer with social links
 │   ├── data/
 │   │   └── products.js           # Static catalog of 16 electronics products
 │   ├── hooks/
 │   │   └── useProductFilter.js   # Custom hook managing category & search filters
-│   ├── App.jsx                   # Single-page orchestrator
+│   ├── Layout/
+│   │   └── RootLayout.jsx        # Root layout with Navbar, Outlet, and Footer
+│   ├── Pages/
+│   │   ├── homePages/
+│   │   │   └── HomePage.jsx      # Home page with hero, categories, and showcase
+│   │   └── products/
+│   │       └── Products.jsx      # Dedicated /products page with header & search
 │   ├── index.css                 # Base theme styles & custom scrollbars
-│   └── main.jsx                  # React 19 application entry point
+│   └── main.jsx                  # React Router configuration & application entry
 ├── index.html                    # HTML shell with meta tags & title
 ├── package.json                  # Dependencies & npm scripts
 ├── vite.config.js                # Vite configuration with Tailwind CSS v4 plugin

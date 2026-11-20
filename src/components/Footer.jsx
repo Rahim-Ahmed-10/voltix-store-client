@@ -1,3 +1,4 @@
+import { Link, useLocation } from "react-router";
 import {
   Zap,
   Globe,
@@ -16,18 +17,21 @@ import {
  * social media icons (lucide-react), and copyright notice.
  */
 const Footer = () => {
+  const location = useLocation();
+  const isHomePage = location.pathname === "/";
+
   const quickLinks = [
-    { label: "Home", href: "#home" },
-    { label: "Featured Products", href: "#products" },
-    { label: "Hardware Categories", href: "#categories" },
-    { label: "Contact & Specs", href: "#contact" },
+    { label: "Home", href: "/" },
+    { label: "Products Catalog", href: "/products" },
+    { label: "Hardware Categories", href: isHomePage ? "#categories" : "/#categories" },
+    { label: "Contact & Specs", href: isHomePage ? "#contact" : "/#contact" },
   ];
 
   const categoryLinks = [
-    { label: "Studio Audio", href: "#categories" },
-    { label: "Titanium Wearables", href: "#categories" },
-    { label: "Mechanical Gaming", href: "#categories" },
-    { label: "Smart Accessories", href: "#categories" },
+    { label: "Studio Audio", href: "/products" },
+    { label: "Titanium Wearables", href: "/products" },
+    { label: "Mechanical Gaming", href: "/products" },
+    { label: "Smart Accessories", href: "/products" },
   ];
 
   const socialLinks = [
@@ -56,9 +60,14 @@ const Footer = () => {
         <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-12 lg:gap-8 pb-12 border-b border-white/10">
           {/* Col 1: Brand Info & Bio (5 cols) */}
           <div className="space-y-4 lg:col-span-5">
-            <a
-              href="#home"
-              onClick={(e) => handleSmoothScroll(e, "#home")}
+            <Link
+              to="/"
+              onClick={(e) => {
+                if (isHomePage) {
+                  e.preventDefault();
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }
+              }}
               className="flex items-center gap-2.5 text-xl font-bold tracking-tight text-white"
             >
               <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-cyan-500/15 text-cyan-400 ring-1 ring-cyan-400/30">
@@ -67,7 +76,7 @@ const Footer = () => {
               <span>
                 Volt<span className="text-cyan-400">ix</span>
               </span>
-            </a>
+            </Link>
 
             <p className="max-w-sm text-sm leading-relaxed text-slate-400">
               Voltix is a premium electronics showcase engineered for tech enthusiasts. Delivering
@@ -99,13 +108,22 @@ const Footer = () => {
             <ul className="space-y-2 text-sm">
               {quickLinks.map((item) => (
                 <li key={item.label}>
-                  <a
-                    href={item.href}
-                    onClick={(e) => handleSmoothScroll(e, item.href)}
-                    className="text-slate-400 transition hover:text-cyan-400"
-                  >
-                    {item.label}
-                  </a>
+                  {item.href.startsWith("#") ? (
+                    <a
+                      href={item.href}
+                      onClick={(e) => handleSmoothScroll(e, item.href)}
+                      className="text-slate-400 transition hover:text-cyan-400"
+                    >
+                      {item.label}
+                    </a>
+                  ) : (
+                    <Link
+                      to={item.href}
+                      className="text-slate-400 transition hover:text-cyan-400"
+                    >
+                      {item.label}
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>
@@ -119,13 +137,12 @@ const Footer = () => {
             <ul className="space-y-2 text-sm">
               {categoryLinks.map((item) => (
                 <li key={item.label}>
-                  <a
-                    href={item.href}
-                    onClick={(e) => handleSmoothScroll(e, item.href)}
+                  <Link
+                    to={item.href}
                     className="text-slate-400 transition hover:text-cyan-400"
                   >
                     {item.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -159,15 +176,15 @@ const Footer = () => {
           <p>© 2026 Voltix Technologies Inc. All rights reserved.</p>
           <div className="flex items-center gap-4">
             <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-0.5 text-[11px] text-slate-400">
-              Single-Page UI/UX Evaluation Mode
+              Voltix Retail UI/UX
             </span>
-            <a
-              href="#home"
-              onClick={(e) => handleSmoothScroll(e, "#home")}
-              className="text-slate-400 hover:text-cyan-400 transition"
+            <button
+              type="button"
+              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+              className="text-slate-400 hover:text-cyan-400 transition cursor-pointer"
             >
               Back to Top ↑
-            </a>
+            </button>
           </div>
         </div>
       </div>
