@@ -1,158 +1,229 @@
+
 import { Link } from "react-router";
 import { motion } from "framer-motion";
 import {
   ArrowRight,
   Sparkles,
-  Zap,
-  Volume2,
-  BatteryCharging,
-  Radio,
+  ShieldCheck,
+  Truck,
+  Headphones,
 } from "lucide-react";
 
-/**
- * Hero Banner Section for Voltix.
- * Highlights high-performance electronics with dark mode aesthetics,
- * glassmorphism surfaces, animated headlines, CTAs, and a flagship visual card.
- *
- * Primary CTA ("Explore Products") navigates to the dedicated /products page.
- * Secondary CTA ("View Featured Drops") scrolls to the Home Page featured 3-card showcase.
- */
+const floatingImages = [
+  {
+    src: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=700&q=85",
+    position: "left-[2%] top-[27%] rotate-[-14deg]",
+    size: "w-36 h-36 lg:w-48 lg:h-48",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=700&q=85",
+    position: "left-[18%] top-[7%] rotate-[-10deg]",
+    size: "w-32 h-32 lg:w-40 lg:h-40",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=700&q=85",
+    position: "left-[38%] top-[2%] rotate-[6deg]",
+    size: "w-32 h-32 lg:w-40 lg:h-40",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1512499617640-c74ae3a79d37?auto=format&fit=crop&w=700&q=85",
+    position: "right-[19%] top-[7%] rotate-[12deg]",
+    size: "w-32 h-32 lg:w-40 lg:h-40",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&w=700&q=85",
+    position: "right-[2%] top-[26%] rotate-[14deg]",
+    size: "w-36 h-36 lg:w-48 lg:h-48",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99b?auto=format&fit=crop&w=700&q=85",
+    position: "left-[5%] bottom-[13%] rotate-[10deg]",
+    size: "w-32 h-32 lg:w-44 lg:h-44",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1546868871-7041f2a55e12?auto=format&fit=crop&w=700&q=85",
+    position: "right-[5%] bottom-[13%] rotate-[-10deg]",
+    size: "w-32 h-32 lg:w-44 lg:h-44",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1503602642458-232111445657?auto=format&fit=crop&w=700&q=85",
+    position: "left-[23%] bottom-[3%] rotate-[8deg]",
+    size: "w-28 h-28 lg:w-36 lg:h-36",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1518441902117-f0a9b6a6c9f5?auto=format&fit=crop&w=700&q=85",
+    position: "right-[23%] bottom-[3%] rotate-[-8deg]",
+    size: "w-28 h-28 lg:w-36 lg:h-36",
+  },
+];
+
 const Hero = () => {
   return (
     <section
       id="home"
-      className="relative overflow-hidden pt-12 pb-16 sm:pt-20 sm:pb-24 lg:pt-24 lg:pb-32"
+      className="relative isolate overflow-hidden bg-[#020617] text-white"
     >
-      {/* Ambient Radial Glowing Background Orbs */}
-      <div className="pointer-events-none absolute -top-36 left-1/4 h-96 w-96 rounded-full bg-cyan-500/15 blur-[120px]" />
-      <div className="pointer-events-none absolute top-1/3 -right-24 h-96 w-96 rounded-full bg-blue-600/15 blur-[130px]" />
+      {/* Background Glow */}
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute left-1/2 top-1/2 h-[500px] w-[700px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan-500/10 blur-[120px]" />
 
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-8">
-          {/* Left Column: Headline, Description & CTAs */}
+        <div className="absolute left-0 top-0 h-80 w-80 rounded-full bg-blue-500/10 blur-[120px]" />
+
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(148,163,184,0.06)_1px,transparent_1px)] [background-size:30px_30px]" />
+      </div>
+
+      {/* Main Container */}
+      <div className="relative mx-auto max-w-[1600px] px-4 sm:px-6 lg:px-8">
+
+        {/* Floating Images */}
+        <div className="pointer-events-none absolute inset-0 overflow-hidden">
+
+          {floatingImages.map((image, index) => (
+            <motion.div
+              key={image.src}
+              initial={{ opacity: 0, y: 20, scale: 0.9 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{
+                duration: 0.6,
+                delay: index * 0.08,
+              }}
+              className={`absolute hidden overflow-hidden rounded-[24px] border border-white/10 bg-slate-900 p-1.5 shadow-[0_18px_40px_rgba(0,0,0,0.4)] sm:block ${image.position} ${image.size}`}
+            >
+              <motion.img
+                src={image.src}
+                alt=""
+                aria-hidden="true"
+                loading={index < 5 ? "eager" : "lazy"}
+                onError={(e) => {
+                  e.currentTarget.parentElement.style.display = "none";
+                }}
+                animate={{ y: [0, -5, 0] }}
+                transition={{
+                  duration: 4 + index,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+                className="h-full w-full rounded-[18px] object-cover"
+              />
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Hero Content */}
+        <div className="relative z-10 flex min-h-[700px] flex-col items-center justify-center py-24 text-center sm:min-h-[760px] sm:py-28 lg:min-h-[820px] lg:py-32">
+
+          {/* Badge */}
           <motion.div
-            initial={{ opacity: 0, y: 24 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="lg:col-span-7 space-y-6 sm:space-y-8"
+            transition={{ duration: 0.5 }}
+            className="mb-6 inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/10 px-4 py-2 text-xs font-semibold text-cyan-300 shadow-sm backdrop-blur-xl sm:text-sm"
           >
-            {/* Pill Tag */}
-            <div className="inline-flex items-center gap-2 rounded-full border border-cyan-400/30 bg-cyan-500/10 px-4 py-1.5 text-xs font-semibold text-cyan-300 backdrop-blur-md">
-              <Sparkles className="h-3.5 w-3.5 text-cyan-400" />
-              <span>Next-Gen Electronics Collection 2026</span>
-            </div>
-
-            {/* Main Headline */}
-            <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl leading-[1.12]">
-              Engineered for{" "}
-              <span className="bg-gradient-to-r from-cyan-400 via-sky-300 to-blue-500 bg-clip-text text-transparent">
-                Peak Performance
-              </span>{" "}
-              & Pure Sound.
-            </h1>
-
-            {/* Subheadline */}
-            <p className="max-w-xl text-base leading-relaxed text-slate-300 sm:text-lg">
-              Discover precision-tuned studio audio, titanium smart wearables, ultra-fast mechanical
-              gaming peripherals, and fast-charging desktop gear at Voltix.
-            </p>
-
-            {/* CTA Buttons */}
-            <div className="flex flex-wrap items-center gap-4 pt-2">
-              {/* Primary CTA navigating to /products */}
-              <Link
-                to="/products"
-                className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-cyan-400 to-blue-500 px-7 py-3.5 text-sm font-bold text-slate-950 shadow-[0_0_24px_rgba(6,182,212,0.4)] transition-all duration-300 hover:shadow-[0_0_32px_rgba(6,182,212,0.6)] hover:scale-105 active:scale-95"
-              >
-                <span>Explore Products</span>
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-
-              {/* Secondary CTA scrolling to the 3-card featured section */}
-              <a
-                href="#products"
-                className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-slate-900/40 px-6 py-3.5 text-sm font-semibold text-white backdrop-blur-xl transition hover:border-cyan-400/40 hover:bg-slate-800/60"
-              >
-                <span>View Featured Drops</span>
-              </a>
-            </div>
-
-            {/* Trust Badges */}
-            <div className="grid grid-cols-3 gap-4 border-t border-white/10 pt-6">
-              <div>
-                <p className="text-xl font-bold text-white">40ms</p>
-                <p className="text-xs text-slate-400">Ultra-Low Latency</p>
-              </div>
-              <div>
-                <p className="text-xl font-bold text-cyan-400">100%</p>
-                <p className="text-xs text-slate-400">Curated Hardware</p>
-              </div>
-              <div>
-                <p className="text-xl font-bold text-white">24/7</p>
-                <p className="text-xs text-slate-400">Premium Support</p>
-              </div>
-            </div>
+            <Sparkles className="h-4 w-4" />
+            Discover the Future of Technology
           </motion.div>
 
-          {/* Right Column: Featured Flagship Visual Card */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.94 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.65, delay: 0.15 }}
-            className="lg:col-span-5"
+          {/* Heading */}
+          <motion.h1
+            initial={{ opacity: 0, y: 25 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="max-w-[950px] text-4xl font-black leading-[1.12] tracking-[-0.04em] text-white sm:text-5xl md:text-6xl lg:text-[76px] xl:text-[84px]"
           >
-            <div className="relative mx-auto max-w-md lg:max-w-none">
-              {/* Outer Glow Ring */}
-              <div className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-cyan-500/30 to-blue-600/30 blur-xl opacity-75" />
+            Discover the Power
+            <br />
 
-              {/* Glassmorphism Card */}
-              <div className="relative overflow-hidden rounded-3xl border border-white/15 bg-slate-900/70 p-5 backdrop-blur-2xl shadow-2xl">
-                {/* Visual Image */}
-                <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl bg-slate-950/80">
-                  <img
-                    src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=900&q=80"
-                    alt="Voltix AuraPulse Studio Edition"
-                    className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
-                  />
-                  <div className="absolute top-3 left-3 flex items-center gap-1.5 rounded-full border border-cyan-400/40 bg-slate-950/80 px-3 py-1 text-[11px] font-semibold text-cyan-300 backdrop-blur-md">
-                    <Zap className="h-3 w-3 text-cyan-400" />
-                    <span>Featured Flagship</span>
-                  </div>
-                </div>
+            <span className="bg-gradient-to-r from-cyan-400 via-sky-400 to-blue-500 bg-clip-text text-transparent">
+              of Next-Gen Tech
+            </span>
+          </motion.h1>
 
-                {/* Card Information */}
-                <div className="mt-5 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-xs font-semibold uppercase tracking-wider text-cyan-400">
-                        Audio • Studio Series
-                      </p>
-                      <h3 className="text-lg font-bold text-white">
-                        AuraPulse ANC Headphones
-                      </h3>
-                    </div>
-                    <span className="text-xl font-extrabold text-cyan-400">
-                      $249.99
-                    </span>
-                  </div>
+          {/* Description */}
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="mt-6 max-w-[680px] text-sm leading-7 text-slate-400 sm:text-base sm:leading-8"
+          >
+            Explore premium gadgets, powerful electronics and smart
+            innovations designed to make your everyday life better.
+            Experience quality, performance and style with Voltix.
+          </motion.p>
 
-                  {/* Feature Highlights Pills */}
-                  <div className="grid grid-cols-3 gap-2 pt-2 border-t border-white/5 text-[11px] text-slate-300 font-medium">
-                    <div className="flex items-center gap-1.5 rounded-lg bg-white/5 px-2.5 py-1.5">
-                      <Volume2 className="h-3.5 w-3.5 text-cyan-400" />
-                      <span>Spatial Audio</span>
-                    </div>
-                    <div className="flex items-center gap-1.5 rounded-lg bg-white/5 px-2.5 py-1.5">
-                      <BatteryCharging className="h-3.5 w-3.5 text-cyan-400" />
-                      <span>45h Battery</span>
-                    </div>
-                    <div className="flex items-center gap-1.5 rounded-lg bg-white/5 px-2.5 py-1.5">
-                      <Radio className="h-3.5 w-3.5 text-cyan-400" />
-                      <span>Zero Lag</span>
-                    </div>
-                  </div>
-                </div>
+          {/* CTA Buttons */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="mt-8 flex w-full flex-col items-center justify-center gap-3 sm:w-auto sm:flex-row"
+          >
+            {/* Primary Button */}
+            <Link
+              to="/products"
+              className="group inline-flex w-full items-center justify-center gap-2.5 rounded-full bg-gradient-to-r from-cyan-400 to-blue-500 px-7 py-3.5 text-sm font-bold text-slate-950 shadow-[0_10px_25px_rgba(6,182,212,0.2)] transition duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-cyan-500/30 active:scale-95 sm:w-auto"
+            >
+              Explore Products
+
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </Link>
+
+            {/* Secondary Button */}
+            <a
+              href="#products"
+              className="inline-flex w-full items-center justify-center rounded-full border border-white/10 bg-white/5 px-7 py-3.5 text-sm font-semibold text-slate-300 transition duration-300 hover:border-cyan-400/30 hover:bg-white/10 hover:text-white active:scale-95 sm:w-auto"
+            >
+              View Featured
+            </a>
+          </motion.div>
+
+          {/* Features */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className="mt-14 w-full max-w-3xl border-t border-white/10 pt-7 sm:mt-16"
+          >
+            <div className="grid grid-cols-3">
+
+              {/* Quality */}
+              <div className="flex flex-col items-center px-2">
+                <ShieldCheck className="h-6 w-6 text-cyan-400" />
+
+                <h3 className="mt-3 text-xs font-bold text-white sm:text-sm">
+                  Quality Products
+                </h3>
+
+                <p className="mt-1 hidden text-xs text-slate-400 sm:block">
+                  Carefully selected
+                </p>
               </div>
+
+              {/* Delivery */}
+              <div className="flex flex-col items-center border-x border-white/10 px-2">
+                <Truck className="h-6 w-6 text-cyan-400" />
+
+                <h3 className="mt-3 text-xs font-bold text-white sm:text-sm">
+                  Fast Delivery
+                </h3>
+
+                <p className="mt-1 hidden text-xs text-slate-400 sm:block">
+                  Convenient shopping
+                </p>
+              </div>
+
+              {/* Support */}
+              <div className="flex flex-col items-center px-2">
+                <Headphones className="h-6 w-6 text-cyan-400" />
+
+                <h3 className="mt-3 text-xs font-bold text-white sm:text-sm">
+                  Customer Support
+                </h3>
+
+                <p className="mt-1 hidden text-xs text-slate-400 sm:block">
+                  Here to help
+                </p>
+              </div>
+
             </div>
           </motion.div>
         </div>
